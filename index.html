@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V2LX License Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-bottom: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .license-key {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            word-break: break-all;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            margin-right: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .tab.active {
+            background: white;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 V2LX Auth</h1>
+            <p>License Management System</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('generate')">Generate License</button>
+            <button class="tab" onclick="switchTab('check')">Check License</button>
+        </div>
+        
+        <div id="generate" class="tab-content active">
+            <div class="info-box">
+                <strong>Generate New License</strong><br>
+                Create a new license key for a user. The license will be bound to the first device that uses it.
+            </div>
+            
+            <form id="generateForm">
+                <div class="form-group">
+                    <label for="name">User Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="expiry">Expiry (Days):</label>
+                    <select id="expiry" name="expiry_days">
+                        <option value="7">7 Days</option>
+                        <option value="30" selected>30 Days</option>
+                        <option value="90">90 Days</option>
+                        <option value="365">1 Year</option>
+                        <option value="0">Never Expires</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn">Generate License Key</button>
+            </form>
+        </div>
+        
+        <div id="check" class="tab-content">
+            <div class="info-box">
+                <strong>Check License Status</strong><br>
+                Enter a license key to view its status and details.
+            </div>
+            
+            <form id="checkForm">
+                <div class="form-group">
+                    <label for="licenseKey">License Key:</label>
+                    <input type="text" id="licenseKey" name="license_key" required placeholder="Enter license key to check">
+                </div>
+                
+                <button type="submit" class="btn btn-secondary">Check License</button>
+            </form>
+        </div>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Clear result
+            document.getElementById('result').style.display = 'none';
+        }
+        
+        function showResult(message, isSuccess) {
+            const result = document.getElementById('result');
+            result.className = `result ${isSuccess ? 'success' : 'error'}`;
+            result.innerHTML = message;
+            result.style.display = 'block';
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('License key copied to clipboard!');
+            });
+        }
+        
+        document.getElementById('generateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {
+                action: 'generate_license',
+                name: formData.get('name'),
+                email: formData.get('email'),
+                expiry_days: parseInt(formData.get('expiry_days'))
+            };
+            
+            try {
+                const response = await fetch('license_generator.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const message = `
+                        <strong>License Generated Successfully!</strong><br><br>
+                        <strong>User:</strong> ${result.user_name}<br>
+                        <strong>Email:</strong> ${result.user_email}<br>
+                        <strong>Expires:</strong> ${new Date(result.expires_at).toLocaleDateString()}<br><br>
+                        <strong>License Key:</strong><br>
+                        <div class="license-key" onclick="copyToClipboard('${result.license_key}')" style="cursor: pointer;" title="Click to copy">
+                            ${result.license_key}
+                        </div>
+                        <small>Click the license key above to copy it to clipboard</small>
+                    `;
+                    showResult(message, true);
+                } else {
+                    showResult(`<strong>Error:</strong> ${result.error}`, false);
+                }
+            } catch (error) {
+                showResult(`<strong>Error:</strong> Failed to connect to server`, false);
+            }
+        });
+        
+        document.getElementById('checkForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const licenseKey = formData.get('license_key');
+            
+            try {
+                const response = await fetch(`license_generator.php?license_key=${encodeURIComponent(licenseKey)}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const license = result.license;
+                    const status = license.is_active ? 
+                        (new Date(license.expires_at) > new Date() ? 'Active' : 'Expired') : 
+                        'Revoked';
+                    
+                    const message = `
+                        <strong>License Information</strong><br><br>
+                        <strong>User:</strong> ${license.user_name}<br>
+                        <strong>Email:</strong> ${license.user_email}<br>
+                        <strong>Status:</strong> ${status}<br>
+                        <strong>Created:</strong> ${new Date(license.created_at).toLocaleDateString()}<br>
+                        <strong>Expires:</strong> ${new Date(license.expires_at).toLocaleDateString()}<br>
+                        ${license.hwid ? `<strong>Bound HWID:</strong> ${license.hwid}<br>` : ''}
+                        ${license.first_used ? `<strong>First Used:</strong> ${new Date(license.first_used).toLocaleDateString()}<br>` : ''}
+                        ${license.last_used ? `<strong>Last Used:</strong> ${new Date(license.last_used).toLocaleDateString()}<br>` : ''}
+                    `;
+                    showResult(message, true);
+                } else {
+                    showResult(`<strong>Error:</strong> ${result.error}`, false);
+                }
+            } catch (error) {
+                showResult(`<strong>Error:</strong> Failed to connect to server`, false);
+            }
+        });
+    </script>
+</body>
+</html>
