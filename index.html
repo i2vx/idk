@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V2LX License Generator</title>
+    <title>V2LX License Generator - GitHub Version</title>
     <style>
         * {
             margin: 0;
@@ -93,10 +93,6 @@
             transform: translateY(0);
         }
         
-        .btn-secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-        
         .result {
             margin-top: 20px;
             padding: 15px;
@@ -125,36 +121,7 @@
             word-break: break-all;
             margin: 10px 0;
             border: 1px solid #dee2e6;
-        }
-        
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-        }
-        
-        .tab {
-            flex: 1;
-            padding: 12px;
-            background: #f8f9fa;
-            border: none;
             cursor: pointer;
-            border-radius: 10px 10px 0 0;
-            margin-right: 5px;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
-        
-        .tab.active {
-            background: white;
-            border-bottom: 2px solid #667eea;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
         }
         
         .info-box {
@@ -165,88 +132,121 @@
             margin-bottom: 20px;
             color: #1565c0;
         }
+        
+        .github-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>🔐 V2LX Auth</h1>
-            <p>License Management System</p>
+            <p>GitHub-Powered License System</p>
         </div>
         
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('generate')">Generate License</button>
-            <button class="tab" onclick="switchTab('check')">Check License</button>
+        <div class="github-info">
+            <strong>📋 Setup Instructions:</strong><br>
+            1. Create a GitHub Personal Access Token with repo permissions<br>
+            2. Enter it below to enable license generation<br>
+            3. Licenses will be stored in your repository's data.json file
         </div>
         
-        <div id="generate" class="tab-content active">
-            <div class="info-box">
-                <strong>Generate New License</strong><br>
-                Create a new license key for a user. The license will be bound to the first device that uses it.
+        <div class="info-box">
+            <strong>GitHub Token Setup:</strong><br>
+            Go to GitHub → Settings → Developer settings → Personal access tokens → Generate new token (classic)<br>
+            Select "repo" scope and copy the token here.
+        </div>
+        
+        <form id="tokenForm">
+            <div class="form-group">
+                <label for="githubToken">GitHub Personal Access Token:</label>
+                <input type="password" id="githubToken" name="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
+            </div>
+            <button type="submit" class="btn">Save Token & Enable License Generation</button>
+        </form>
+        
+        <div id="licenseSection" style="display: none;">
+            <hr style="margin: 30px 0;">
+            
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('generate')">Generate License</button>
+                <button class="tab" onclick="switchTab('check')">Check License</button>
             </div>
             
-            <form id="generateForm">
-                <div class="form-group">
-                    <label for="name">User Name:</label>
-                    <input type="text" id="name" name="name" required>
+            <div id="generate" class="tab-content active">
+                <div class="info-box">
+                    <strong>Generate New License</strong><br>
+                    Create a new license key for a user. The license will be bound to the first device that uses it.
                 </div>
                 
-                <div class="form-group">
-                    <label for="email">Email Address:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="expiry">Expiry (Days):</label>
-                    <select id="expiry" name="expiry_days">
-                        <option value="7">7 Days</option>
-                        <option value="30" selected>30 Days</option>
-                        <option value="90">90 Days</option>
-                        <option value="365">1 Year</option>
-                        <option value="0">Never Expires</option>
-                    </select>
-                </div>
-                
-                <button type="submit" class="btn">Generate License Key</button>
-            </form>
-        </div>
-        
-        <div id="check" class="tab-content">
-            <div class="info-box">
-                <strong>Check License Status</strong><br>
-                Enter a license key to view its status and details.
+                <form id="generateForm">
+                    <div class="form-group">
+                        <label for="name">User Name:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="expiry">Expiry (Days):</label>
+                        <select id="expiry" name="expiry_days">
+                            <option value="7">7 Days</option>
+                            <option value="30" selected>30 Days</option>
+                            <option value="90">90 Days</option>
+                            <option value="365">1 Year</option>
+                            <option value="0">Never Expires</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn">Generate License Key</button>
+                </form>
             </div>
             
-            <form id="checkForm">
-                <div class="form-group">
-                    <label for="licenseKey">License Key:</label>
-                    <input type="text" id="licenseKey" name="license_key" required placeholder="Enter license key to check">
+            <div id="check" class="tab-content">
+                <div class="info-box">
+                    <strong>Check License Status</strong><br>
+                    Enter a license key to view its status and details.
                 </div>
                 
-                <button type="submit" class="btn btn-secondary">Check License</button>
-            </form>
+                <form id="checkForm">
+                    <div class="form-group">
+                        <label for="licenseKey">License Key:</label>
+                        <input type="text" id="licenseKey" name="license_key" required placeholder="Enter license key to check">
+                    </div>
+                    
+                    <button type="submit" class="btn">Check License</button>
+                </form>
+            </div>
         </div>
         
         <div id="result" class="result"></div>
     </div>
 
     <script>
+        let githubToken = '';
+        const REPO_OWNER = 'i2vx';
+        const REPO_NAME = 'idk';
+        const DATA_FILE = 'licenses.json';
+        
         function switchTab(tabName) {
-            // Hide all tab contents
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
             
-            // Remove active class from all tabs
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
             
-            // Show selected tab content
             document.getElementById(tabName).classList.add('active');
-            
-            // Add active class to clicked tab
             event.target.classList.add('active');
             
-            // Clear result
             document.getElementById('result').style.display = 'none';
         }
         
@@ -263,46 +263,160 @@
             });
         }
         
+        function generateLicenseKey(length = 32) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let license = '';
+            for (let i = 0; i < length; i++) {
+                license += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return license;
+        }
+        
+        async function getLicenseData() {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`, {
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    return JSON.parse(atob(data.content));
+                } else if (response.status === 404) {
+                    // File doesn't exist, return empty object
+                    return {};
+                } else {
+                    throw new Error('Failed to fetch license data');
+                }
+            } catch (error) {
+                console.error('Error fetching license data:', error);
+                return {};
+            }
+        }
+        
+        async function saveLicenseData(data) {
+            try {
+                const content = btoa(JSON.stringify(data, null, 2));
+                const sha = await getFileSHA();
+                
+                const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Update license data',
+                        content: content,
+                        sha: sha
+                    })
+                });
+                
+                return response.ok;
+            } catch (error) {
+                console.error('Error saving license data:', error);
+                return false;
+            }
+        }
+        
+        async function getFileSHA() {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`, {
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.sha;
+                }
+                return null;
+            } catch (error) {
+                return null;
+            }
+        }
+        
+        document.getElementById('tokenForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const token = document.getElementById('githubToken').value;
+            if (!token) {
+                showResult('Please enter a GitHub token', false);
+                return;
+            }
+            
+            // Test the token by trying to fetch repository info
+            try {
+                const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`, {
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                if (response.ok) {
+                    githubToken = token;
+                    document.getElementById('licenseSection').style.display = 'block';
+                    document.getElementById('tokenForm').style.display = 'none';
+                    showResult('✅ GitHub token saved successfully! License generation is now enabled.', true);
+                } else {
+                    showResult('❌ Invalid GitHub token. Please check your token and try again.', false);
+                }
+            } catch (error) {
+                showResult('❌ Error validating token. Please try again.', false);
+            }
+        });
+        
         document.getElementById('generateForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const formData = new FormData(e.target);
-            const data = {
-                action: 'generate_license',
-                name: formData.get('name'),
-                email: formData.get('email'),
-                expiry_days: parseInt(formData.get('expiry_days'))
-            };
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const expiryDays = parseInt(formData.get('expiry_days'));
             
             try {
-                const response = await fetch('license_generator.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
+                const licenseData = await getLicenseData();
+                const licenseKey = generateLicenseKey();
                 
-                const result = await response.json();
+                const expiresAt = expiryDays > 0 ? new Date(Date.now() + expiryDays * 24 * 60 * 60 * 1000) : new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000);
                 
-                if (result.success) {
+                licenseData[licenseKey] = {
+                    user_name: name,
+                    user_email: email,
+                    created_at: new Date().toISOString(),
+                    expires_at: expiresAt.toISOString(),
+                    is_active: true,
+                    hwid: null,
+                    first_used: null,
+                    last_used: null
+                };
+                
+                const success = await saveLicenseData(licenseData);
+                
+                if (success) {
                     const message = `
                         <strong>License Generated Successfully!</strong><br><br>
-                        <strong>User:</strong> ${result.user_name}<br>
-                        <strong>Email:</strong> ${result.user_email}<br>
-                        <strong>Expires:</strong> ${new Date(result.expires_at).toLocaleDateString()}<br><br>
+                        <strong>User:</strong> ${name}<br>
+                        <strong>Email:</strong> ${email}<br>
+                        <strong>Expires:</strong> ${expiresAt.toLocaleDateString()}<br><br>
                         <strong>License Key:</strong><br>
-                        <div class="license-key" onclick="copyToClipboard('${result.license_key}')" style="cursor: pointer;" title="Click to copy">
-                            ${result.license_key}
+                        <div class="license-key" onclick="copyToClipboard('${licenseKey}')" title="Click to copy">
+                            ${licenseKey}
                         </div>
                         <small>Click the license key above to copy it to clipboard</small>
                     `;
                     showResult(message, true);
                 } else {
-                    showResult(`<strong>Error:</strong> ${result.error}`, false);
+                    showResult('❌ Failed to save license to GitHub. Please try again.', false);
                 }
             } catch (error) {
-                showResult(`<strong>Error:</strong> Failed to connect to server`, false);
+                showResult('❌ Error generating license: ' + error.message, false);
             }
         });
         
@@ -313,34 +427,65 @@
             const licenseKey = formData.get('license_key');
             
             try {
-                const response = await fetch(`license_generator.php?license_key=${encodeURIComponent(licenseKey)}`);
-                const result = await response.json();
+                const licenseData = await getLicenseData();
+                const license = licenseData[licenseKey];
                 
-                if (result.success) {
-                    const license = result.license;
-                    const status = license.is_active ? 
-                        (new Date(license.expires_at) > new Date() ? 'Active' : 'Expired') : 
-                        'Revoked';
-                    
-                    const message = `
-                        <strong>License Information</strong><br><br>
-                        <strong>User:</strong> ${license.user_name}<br>
-                        <strong>Email:</strong> ${license.user_email}<br>
-                        <strong>Status:</strong> ${status}<br>
-                        <strong>Created:</strong> ${new Date(license.created_at).toLocaleDateString()}<br>
-                        <strong>Expires:</strong> ${new Date(license.expires_at).toLocaleDateString()}<br>
-                        ${license.hwid ? `<strong>Bound HWID:</strong> ${license.hwid}<br>` : ''}
-                        ${license.first_used ? `<strong>First Used:</strong> ${new Date(license.first_used).toLocaleDateString()}<br>` : ''}
-                        ${license.last_used ? `<strong>Last Used:</strong> ${new Date(license.last_used).toLocaleDateString()}<br>` : ''}
-                    `;
-                    showResult(message, true);
-                } else {
-                    showResult(`<strong>Error:</strong> ${result.error}`, false);
+                if (!license) {
+                    showResult('❌ License not found', false);
+                    return;
                 }
+                
+                const status = license.is_active ? 
+                    (new Date(license.expires_at) > new Date() ? 'Active' : 'Expired') : 
+                    'Revoked';
+                
+                const message = `
+                    <strong>License Information</strong><br><br>
+                    <strong>User:</strong> ${license.user_name}<br>
+                    <strong>Email:</strong> ${license.user_email}<br>
+                    <strong>Status:</strong> ${status}<br>
+                    <strong>Created:</strong> ${new Date(license.created_at).toLocaleDateString()}<br>
+                    <strong>Expires:</strong> ${new Date(license.expires_at).toLocaleDateString()}<br>
+                    ${license.hwid ? `<strong>Bound HWID:</strong> ${license.hwid}<br>` : ''}
+                    ${license.first_used ? `<strong>First Used:</strong> ${new Date(license.first_used).toLocaleDateString()}<br>` : ''}
+                    ${license.last_used ? `<strong>Last Used:</strong> ${new Date(license.last_used).toLocaleDateString()}<br>` : ''}
+                `;
+                showResult(message, true);
             } catch (error) {
-                showResult(`<strong>Error:</strong> Failed to connect to server`, false);
+                showResult('❌ Error checking license: ' + error.message, false);
             }
         });
+        
+        // Add CSS for tabs
+        const style = document.createElement('style');
+        style.textContent = `
+            .tabs {
+                display: flex;
+                margin-bottom: 20px;
+            }
+            .tab {
+                flex: 1;
+                padding: 12px;
+                background: #f8f9fa;
+                border: none;
+                cursor: pointer;
+                border-radius: 10px 10px 0 0;
+                margin-right: 5px;
+                font-weight: 600;
+                transition: background-color 0.3s ease;
+            }
+            .tab.active {
+                background: white;
+                border-bottom: 2px solid #667eea;
+            }
+            .tab-content {
+                display: none;
+            }
+            .tab-content.active {
+                display: block;
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
